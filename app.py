@@ -8,7 +8,7 @@ from plotly.graph_objs import *
 import requests
 from bs4 import BeautifulSoup
 
-connect = sqlite3.connect("finalexam/assets/hr")
+connect = sqlite3.connect("hr")
 
 data_ex2_employeee = pd.read_sql(
     "SELECT employees.first_name, jobs.job_title "
