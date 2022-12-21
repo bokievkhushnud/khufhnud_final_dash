@@ -47,8 +47,16 @@ def q3(min_val, max_val):
 
     return fig
 
+def clear_df(element):
+    if element == "-":
+        return 0
+    else:
+        element = element[1:]
+        element = element.replace(",","")
+        return float(element)
 
 def parsing_website():
+    global hd
     URL = "https://www.itjobswatch.co.uk/jobs/uk/sqlite.do"
     requests.get(URL)
     s = BeautifulSoup(requests.get(URL).content, "html5lib")
@@ -74,15 +82,9 @@ def parsing_website():
     df.columns = hd
     df.set_index("index", inplace=True)
     df.reset_index(inplace=True)
-    df["Same period 2021"] = df["Same period 2021"].str.replace("£", "")
-    df["Same period 2021"] = df["Same period 2021"].str.replace(",", "")
-    df["Same period 2021"] = df["Same period 2021"].str.replace("-", "0").astype(float)
-    df["6 months to19 Dec 2022"] = df["6 months to19 Dec 2022"].str.replace("£", "")
-    df["6 months to19 Dec 2022"] = (
-        df["6 months to19 Dec 2022"].str.replace(",", "").astype(float)
-    )
-    df["Same period 2020"] = df["Same period 2020"].str.replace("£", "")
-    df["Same period 2020"] = df["Same period 2020"].str.replace(",", "").astype(float)
+    hd = hd[1:]
+    for i in hd:
+        df[i] = df[i].apply(clear_df)
 
     df.loc[4] = ["Average", avg_salary, avg_salary, avg_salary]
     return df
